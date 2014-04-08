@@ -25,24 +25,8 @@ namespace MvcFinalTest.Controllers
 
         public ActionResult Create()
         {
-            List<SelectListItem> Branches = new List<SelectListItem>();
-            List<SelectListItem> JobTypes = new List<SelectListItem>();
+            PopulateDropDown();
 
-            Collection<Models.BranchModel> BranchesFromDb = branchService.GetAll();
-            Collection<Models.JobTypeModel> JobTypesFromDb = jobTypeService.GetAll();
-
-            foreach (var b in BranchesFromDb)
-            {
-                Branches.Add(new SelectListItem() { Text = b.Name, Value = b.BranchId.ToString() });
-            }
-
-            foreach (var j in JobTypesFromDb)
-            {
-                JobTypes.Add(new SelectListItem() { Text = j.Name, Value = j.JobTypeId.ToString() });
-            }
-
-            ViewBag.Branches = Branches;
-            ViewBag.JobTypes = JobTypes;
             return View();
         }
 
@@ -52,8 +36,22 @@ namespace MvcFinalTest.Controllers
             employee.BranchId = int.Parse(Branches);
             employee.JobTypeId = int.Parse(JobTypes);
 
-            service.Add(employee);
-            return RedirectToAction("Index");
+            int length = employee.FirstName.Length + employee.LastName.Length;
+
+            if (length > 100)
+            {
+                PopulateDropDown();
+                ModelState.AddModelError("Firstname", "Firstname + Lastname should not more than 100");
+                ModelState.AddModelError("Firstname", "Lastname + Lastname should not more than 100");
+                return View();
+            }
+            else
+            {
+                service.Add(employee);
+                return RedirectToAction("Index");
+            }
+
+            
         }
 
         public ActionResult Edit(int id)
@@ -102,28 +100,28 @@ namespace MvcFinalTest.Controllers
             return RedirectToAction("Index");
         }
 
-        //[NonAction]
-        //public void PopulateDropDown()
-        //{
-        //    List<SelectListItem> Branches = new List<SelectListItem>();
-        //    List<SelectListItem> JobTypes = new List<SelectListItem>();
+        [NonAction]
+        public void PopulateDropDown()
+        {
+            List<SelectListItem> Branches = new List<SelectListItem>();
+            List<SelectListItem> JobTypes = new List<SelectListItem>();
 
-        //    Collection<Models.BranchModel> BranchesFromDb = branchService.GetAll();
-        //    Collection<Models.JobTypeModel> JobTypesFromDb = jobTypeService.GetAll();
+            Collection<Models.BranchModel> BranchesFromDb = branchService.GetAll();
+            Collection<Models.JobTypeModel> JobTypesFromDb = jobTypeService.GetAll();
 
-        //    foreach (var b in BranchesFromDb)
-        //    {
-        //        Branches.Add(new SelectListItem() { Text = b.Name, Value = b.BranchId.ToString() });
-        //    }
+            foreach (var b in BranchesFromDb)
+            {
+                Branches.Add(new SelectListItem() { Text = b.Name, Value = b.BranchId.ToString() });
+            }
 
-        //    foreach (var j in JobTypesFromDb)
-        //    {
-        //        JobTypes.Add(new SelectListItem() { Text = j.Name, Value = j.JobTypeId.ToString() });
-        //    }
+            foreach (var j in JobTypesFromDb)
+            {
+                JobTypes.Add(new SelectListItem() { Text = j.Name, Value = j.JobTypeId.ToString() });
+            }
 
-        //    ViewBag.Branches = Branches;
-        //    ViewBag.JobTypes = JobTypes;
-        //}
+            ViewBag.Branches = Branches;
+            ViewBag.JobTypes = JobTypes;
+        }
 
     }
 }
