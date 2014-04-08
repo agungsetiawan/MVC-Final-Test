@@ -1,0 +1,102 @@
+﻿@model MvcFinalTest.Models.EmployeeModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>EmployeeModel</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EmployeeId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.EmployeeId)
+            @Html.ValidationMessageFor(model => model.EmployeeId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FirstName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FirstName)
+            @Html.ValidationMessageFor(model => model.FirstName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastName)
+            @Html.ValidationMessageFor(model => model.LastName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Email)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Address)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Address)
+            @Html.ValidationMessageFor(model => model.Address)
+        </div>
+
+        @*<div class="editor-label">
+            @Html.LabelFor(model => model.BranchId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.BranchId)
+            @Html.ValidationMessageFor(model => model.BranchId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.JobTypeId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.JobTypeId)
+            @Html.ValidationMessageFor(model => model.JobTypeId)
+        </div>*@
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Branch)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("Branches")
+            @*@Html.EditorFor(model => model.Branch)*@
+            @Html.ValidationMessageFor(model => model.Branch)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.JobType)
+        </div>
+        <div class="editor-field">
+             @Html.DropDownList("JobTypes")
+            @*@Html.EditorFor(model => model.JobType)*@
+            @Html.ValidationMessageFor(model => model.JobType)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
