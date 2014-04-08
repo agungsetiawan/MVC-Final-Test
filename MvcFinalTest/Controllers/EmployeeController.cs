@@ -41,8 +41,9 @@ namespace MvcFinalTest.Controllers
             if (length > 100)
             {
                 PopulateDropDown();
+
                 ModelState.AddModelError("Firstname", "Firstname + Lastname should not more than 100");
-                ModelState.AddModelError("Firstname", "Lastname + Lastname should not more than 100");
+                ModelState.AddModelError("Lastname", "Lastname + Lastname should not more than 100");
                 return View();
             }
             else
@@ -56,30 +57,8 @@ namespace MvcFinalTest.Controllers
 
         public ActionResult Edit(int id)
         {
-            
             EmployeeModel employee = service.GetEmployeeById(id);
-
-            List<SelectListItem> Branches = new List<SelectListItem>();
-            List<SelectListItem> JobTypes = new List<SelectListItem>();
-
-            Collection<Models.BranchModel> BranchesFromDb = branchService.GetAll();
-            Collection<Models.JobTypeModel> JobTypesFromDb = jobTypeService.GetAll();
-
-            foreach (var b in BranchesFromDb)
-            {
-                Branches.Add(new SelectListItem() { Text = b.Name, Value = b.BranchId.ToString(),
-                Selected=b.BranchId==employee.BranchId? true : false
-                });
-            }
-
-            foreach (var j in JobTypesFromDb)
-            {
-                JobTypes.Add(new SelectListItem() { Text = j.Name, Value = j.JobTypeId.ToString(),
-                Selected=j.JobTypeId==employee.JobTypeId? true : false});
-            }
-
-            ViewBag.Branches = Branches;
-            ViewBag.JobTypes = JobTypes;
+            PopulateDropDownEdit(employee);
 
             return View(employee);
         }
@@ -90,8 +69,21 @@ namespace MvcFinalTest.Controllers
             employee.BranchId = int.Parse(Branches);
             employee.JobTypeId = int.Parse(JobTypes);
 
-            service.Edit(employee);
-            return RedirectToAction("Index");
+            int length = employee.FirstName.Length + employee.LastName.Length;
+
+            if (length > 100)
+            {
+                PopulateDropDownEdit(employee);
+
+                ModelState.AddModelError("Firstname", "Firstname + Lastname should not more than 100");
+                ModelState.AddModelError("Lastname", "Lastname + Lastname should not more than 100");
+                return View();
+            }
+            else
+            {
+                service.Edit(employee);
+                return RedirectToAction("Index");
+            }
         }
 
         public ActionResult Delete(int id)
@@ -117,6 +109,41 @@ namespace MvcFinalTest.Controllers
             foreach (var j in JobTypesFromDb)
             {
                 JobTypes.Add(new SelectListItem() { Text = j.Name, Value = j.JobTypeId.ToString() });
+            }
+
+            ViewBag.Branches = Branches;
+            ViewBag.JobTypes = JobTypes;
+        }
+
+        [NonAction]
+        public void PopulateDropDownEdit(EmployeeModel employee)
+        {
+            
+
+            List<SelectListItem> Branches = new List<SelectListItem>();
+            List<SelectListItem> JobTypes = new List<SelectListItem>();
+
+            Collection<Models.BranchModel> BranchesFromDb = branchService.GetAll();
+            Collection<Models.JobTypeModel> JobTypesFromDb = jobTypeService.GetAll();
+
+            foreach (var b in BranchesFromDb)
+            {
+                Branches.Add(new SelectListItem()
+                {
+                    Text = b.Name,
+                    Value = b.BranchId.ToString(),
+                    Selected = b.BranchId == employee.BranchId ? true : false
+                });
+            }
+
+            foreach (var j in JobTypesFromDb)
+            {
+                JobTypes.Add(new SelectListItem()
+                {
+                    Text = j.Name,
+                    Value = j.JobTypeId.ToString(),
+                    Selected = j.JobTypeId == employee.JobTypeId ? true : false
+                });
             }
 
             ViewBag.Branches = Branches;
