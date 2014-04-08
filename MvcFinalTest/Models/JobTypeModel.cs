@@ -14,7 +14,7 @@ namespace MvcFinalTest.Models
         [Required(ErrorMessage="Name is mandatory")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Name is mandatory")]
+        [Required(ErrorMessage = "Rate is mandatory")]
         public decimal RatePerHour { get; set; }
     }
 }

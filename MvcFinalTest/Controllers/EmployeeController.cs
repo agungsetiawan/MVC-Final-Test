@@ -23,6 +23,12 @@ namespace MvcFinalTest.Controllers
             return View(service.GetAll());
         }
 
+        [HttpPost]
+        public ActionResult Search(string ByFirstName)
+        {
+            return View(service.Search(ByFirstName));
+        }
+
         public ActionResult Create()
         {
             PopulateDropDown();
