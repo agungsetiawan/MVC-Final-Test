@@ -65,7 +65,7 @@ namespace MvcFinalTest.Data
             foreach (var item in result)
             {
                 item.Branch = BranchRepository.GetBranchById(item.BranchId).Name;
-                item.JobType = BranchRepository.GetBranchById(item.JobTypeId).Name;
+                item.JobType = JobTypeRepository.GetJobTypeById(item.JobTypeId).Name;
             }
             return result;
         }
